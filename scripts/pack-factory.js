@@ -11,19 +11,14 @@ const SEARCH_INDEX = path.resolve('public/search.json');
 
 /**
  * 核心打包函数
- * @param {string} sourceDir 源目录
- * @param {string} outPath 输出路径
  */
 function archiveDirectory(sourceDir, outPath) {
   return new Promise((resolve, reject) => {
     const output = fs.createWriteStream(outPath);
     const archive = archiver('zip', { zlib: { level: 9 } });
-
     output.on('close', resolve);
     archive.on('error', reject);
-
     archive.pipe(output);
-    // 排除不必要的文件
     archive.glob('**/*', {
       cwd: sourceDir,
       ignore: ['node_modules/**', '.git/**', '__pycache__/**', 'dist/**', '.DS_Store']
@@ -32,25 +27,15 @@ function archiveDirectory(sourceDir, outPath) {
   });
 }
 
-/**
- * 检测目录是否包含源码文件
- * @param {string} dir 目录路径
- */
 async function hasSourceCode(dir) {
   const files = await fs.readdir(dir);
-  const sourceExtensions = ['.py', '.js', '.ts', '.sh', '.rs', '.go'];
-  const configFiles = ['package.json', 'requirements.txt', 'Dockerfile', 'go.mod'];
-  
-  return files.some(file => {
-    const ext = path.extname(file).toLowerCase();
-    return sourceExtensions.includes(ext) || configFiles.includes(file);
-  });
+  const sourceFiles = ['.py', '.js', '.ts', '.sh', '.rs', 'package.json', 'requirements.txt'];
+  return files.some(file => sourceFiles.includes(file) || sourceFiles.includes(path.extname(file)));
 }
 
 async function packFactory() {
-  console.log('🚀 启动装配工厂流水线...');
+  console.log('🚀 启动装配工厂双语构建流...');
 
-  // 1. 初始化目录
   await fs.emptyDir(DIST_SKILLS);
   await fs.emptyDir(DIST_MCPS);
   await fs.ensureDir(DATA_DIR);
@@ -58,40 +43,12 @@ async function packFactory() {
   const skillsRegistry = [];
   const mcpsRegistry = [];
 
-  // 2. 处理 Skills
-  if (await fs.pathExists(SKILLS_DIR)) {
-    const folders = await fs.readdir(SKILLS_DIR);
+  const processCategory = async (dir, isSkill) => {
+    if (!await fs.pathExists(dir)) return;
+    const folders = await fs.readdir(dir);
     for (const slug of folders) {
-      const itemPath = path.join(SKILLS_DIR, slug);
+      const itemPath = path.join(dir, slug);
       if (!(await fs.stat(itemPath)).isDirectory()) continue;
-
-      const metaPath = path.join(itemPath, '_meta.json');
-      if (!(await fs.pathExists(metaPath))) continue;
-
-      const meta = await fs.readJson(metaPath);
-      const zipName = `${meta.slug || slug}.zip`;
-      const outPath = path.join(DIST_SKILLS, zipName);
-
-      await archiveDirectory(itemPath, outPath);
-      
-      skillsRegistry.push({
-        ...meta,
-        id: meta.id || slug,
-        slug: meta.slug || slug,
-        download_url: `/dist-skills/${zipName}`,
-        driver_type: "zip_package"
-      });
-      console.log(`✅ [Skill] 打包完成: ${meta.name}`);
-    }
-  }
-
-  // 3. 处理 MCPs
-  if (await fs.pathExists(MCPS_DIR)) {
-    const folders = await fs.readdir(MCPS_DIR);
-    for (const slug of folders) {
-      const itemPath = path.join(MCPS_DIR, slug);
-      if (!(await fs.stat(itemPath)).isDirectory()) continue;
-
       const metaPath = path.join(itemPath, '_meta.json');
       if (!(await fs.pathExists(metaPath))) continue;
 
@@ -100,40 +57,47 @@ async function packFactory() {
         ...meta,
         id: meta.id || slug,
         slug: meta.slug || slug,
-        driver_type: "mcp"
+        type: isSkill ? 'skill' : 'mcp',
+        name_en: meta.name_en || meta.name, // 兜底
+        description_en: meta.description_en || meta.description,
+        icon: meta.icon || (isSkill ? 'cpu' : 'wrench')
       };
 
-      // 检测源码
-      if (await hasSourceCode(itemPath)) {
-        const zipName = `${meta.slug || slug}.zip`;
-        const outPath = path.join(DIST_MCPS, zipName);
-        await archiveDirectory(itemPath, outPath);
-        entry.download_url = `/dist-mcps/${zipName}`;
-        entry.install_type = "mcp_source";
+      if (isSkill) {
+        const zipName = `${entry.slug}.zip`;
+        await archiveDirectory(itemPath, path.join(DIST_SKILLS, zipName));
+        entry.download_url = `/dist-skills/${zipName}`;
+        entry.driver_type = "zip_package";
+        skillsRegistry.push(entry);
       } else {
-        entry.install_type = "mcp_config";
+        entry.driver_type = "mcp";
+        if (await hasSourceCode(itemPath)) {
+          const zipName = `${entry.slug}.zip`;
+          await archiveDirectory(itemPath, path.join(DIST_MCPS, zipName));
+          entry.download_url = `/dist-mcps/${zipName}`;
+          entry.install_type = "mcp_source";
+        } else {
+          entry.install_type = "mcp_config";
+        }
+        mcpsRegistry.push(entry);
       }
-
-      mcpsRegistry.push(entry);
-      console.log(`✅ [MCP] 处理完成: ${meta.name} (${entry.install_type})`);
+      console.log(`✅ [${isSkill ? 'Skill' : 'MCP'}] ${entry.name}`);
     }
-  }
+  };
 
-  // 4. 持久化数据
+  await processCategory(SKILLS_DIR, true);
+  await processCategory(MCPS_DIR, false);
+
   await fs.writeJson(path.join(DATA_DIR, 'skills-master.json'), skillsRegistry, { spaces: 2 });
   await fs.writeJson(path.join(DATA_DIR, 'mcps-master.json'), mcpsRegistry, { spaces: 2 });
 
-  // 5. 更新搜索索引
+  // 全量双语搜索索引
   const searchIndex = [
-    ...skillsRegistry.map(s => ({ id: s.id, name: s.name, type: 'skill' })),
-    ...mcpsRegistry.map(m => ({ id: m.id, name: m.name, type: 'mcp' }))
+    ...skillsRegistry,
+    ...mcpsRegistry
   ];
   await fs.writeJson(SEARCH_INDEX, searchIndex);
-
-  console.log(`✨ 构建流执行完毕。`);
+  console.log(`✨ 构建完成。索引包含 ${searchIndex.length} 个项目。`);
 }
 
-packFactory().catch(err => {
-  console.error('❌ 构建流异常终止:', err);
-  process.exit(1);
-});
+packFactory().catch(console.error);

@@ -1,322 +1,322 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MarketCard from '../components/MarketCard.astro';
 import skillsMaster from '../data/skills-master.json';
 import mcpsMaster from '../data/mcps-master.json';
+import { Icon } from 'astro-icon/components';
 
 const skills = skillsMaster || [];
 const mcps = mcpsMaster || [];
+const total = skills.length + mcps.length;
 ---
 
-<html lang="zh-CN">
-<head>
-	<meta charset="utf-8" />
-	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-	<meta name="viewport" content="width=device-width" />
-	<meta name="generator" content={Astro.generator} />
-	<title>装配工厂 | 技能与 MCP 分发中心</title>
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-</head>
-<body>
-	<main class="container">
-		<header class="hero">
-			<div class="badge">Modular AI Factory</div>
-			<h1>装配工厂<span>技能与 MCP 仓库</span></h1>
-			<p class="subtitle">为您的数字员工平衡核心能力 (Skills) 与 外部链接 (MCP)</p>
-			
-			<div class="actions">
-				<button id="copy-repo" class="btn btn-primary">
-					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+<BaseLayout 
+	title="装配工厂 | 数字员工技能商店 & MCP 服务市场" 
+	description="发现、下载和安装 AI 智能体技能与 MCP 扩展插件。"
+	lang="zh"
+>
+	<header class="hero-section glass" slot="header">
+		<nav class="nav-container container">
+			<div class="logo">
+				<Icon name="lucide:zap" class="logo-icon" />
+				<span>装配工厂 <span>Factory</span></span>
+			</div>
+			<div class="nav-actions">
+				<a href="/en" class="lang-toggle btn-ghost">
+					<Icon name="lucide:languages" />
+					English
+				</a>
+				<button id="copy-repo" class="btn-primary">
+					<Icon name="lucide:copy" />
 					复制仓库地址
 				</button>
-				<div class="api-links">
-					<a href="/api/skills/1.json" target="_blank" class="link-small">Skill API</a>
-					<a href="/api/mcps/1.json" target="_blank" class="link-small">MCP API</a>
+			</div>
+		</nav>
+
+		<div class="hero-content container">
+			<div class="badge animate-fade-in">Astro + Cloudflare Pages</div>
+			<h1 class="animate-fade-in">数字员工<span>技能商店</span></h1>
+			<p class="subtitle animate-fade-in">以 Skill 商店与 MCP 服务为核心，构建您的 AI 能力库</p>
+			
+			<div class="search-area animate-fade-in">
+				<div class="search-box glass">
+					<Icon name="lucide:search" class="search-icon" />
+					<input type="text" id="search-input" placeholder="搜索资源库 (按 / 聚焦)..." />
+					<kbd>/</kbd>
 				</div>
 			</div>
-		</header>
+		</div>
+	</header>
 
-		<section class="controls">
+	<main class="container main-content">
+		<div class="sticky-bar glass">
 			<div class="tabs" id="tab-switcher">
-				<button class="tab-btn active" data-tab="skills">
+				<button class="tab-btn active" data-tab="all">
+					全部资源
+					<span class="count">{total}</span>
+				</button>
+				<button class="tab-btn" data-tab="skill">
 					技能包 (Skills)
 					<span class="count">{skills.length}</span>
 				</button>
-				<button class="tab-btn" data-tab="mcps">
+				<button class="tab-btn" data-tab="mcp">
 					工具 (MCP)
 					<span class="count">{mcps.length}</span>
 				</button>
 			</div>
-			<div class="search-wrapper">
-				<input type="text" id="search-input" placeholder="搜索资源库..." />
-				<kbd>/</kbd>
-			</div>
+		</div>
+
+		<section class="grid-section" id="resource-grid">
+			{skills.map(item => <MarketCard item={item} lang="zh" />)}
+			{mcps.map(item => <MarketCard item={item} lang="zh" />)}
 		</section>
-
-		<!-- Skills View -->
-		<div class="content-view active" id="view-skills">
-			<div class="grid">
-				{skills.map((skill) => (
-					<div class="card skill-card" data-name={skill.name.toLowerCase()} data-desc={skill.description.toLowerCase()}>
-						<div class="card-header">
-							<span class="label skill-label">{skill.category || 'Skill'}</span>
-							<span class="version">v{skill.version || '1.0.0'}</span>
-						</div>
-						<h3>{skill.name}</h3>
-						<p>{skill.description}</p>
-						<div class="card-footer">
-							<span class="author">by {skill.author}</span>
-							<a href={skill.download_url} class="action-link">下载 ZIP</a>
-						</div>
-					</div>
-				))}
-			</div>
-		</div>
-
-		<!-- MCPs View -->
-		<div class="content-view" id="view-mcps">
-			<div class="grid">
-				{mcps.map((mcp) => {
-					const mcpConfig = mcp.mcp_config || {};
-					const npxCmd = mcpConfig.command === 'npx' ? `npx ${mcpConfig.args?.join(' ')}` : null;
-					
-					return (
-						<div class="card mcp-card" data-name={mcp.name.toLowerCase()} data-desc={mcp.description.toLowerCase()}>
-							<div class="card-header">
-								<span class="label mcp-label">MCP Tool</span>
-								<span class="protocol">stdio</span>
-							</div>
-							<h3>{mcp.name}</h3>
-							<p>{mcp.description}</p>
-							
-							{npxCmd && (
-								<div class="mcp-command">
-									<code>{npxCmd}</code>
-									<button class="copy-cmd" data-cmd={npxCmd} title="复制指令">
-										<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-									</button>
-								</div>
-							)}
-
-							<div class="card-footer">
-								<span class="author">by {mcp.author}</span>
-								<span class="type-badge">Driver: MCP</span>
-							</div>
-						</div>
-					)
-				})}
-			</div>
-		</div>
 	</main>
 
-	<style>
-		:root {
-			--primary: #6366f1;
-			--primary-hover: #4f46e5;
-			--mcp-color: #10b981;
-			--bg: #0f172a;
-			--card-bg: #1e293b;
-			--text: #f8fafc;
-			--text-muted: #94a3b8;
-			--border: #334155;
-			--glow: rgba(99, 102, 241, 0.15);
-		}
+	<footer class="container footer glass" slot="footer">
+		<div class="footer-grid">
+			<div class="footer-info">
+				<h4>关于装配工厂</h4>
+				<p>我们提供工程化、标准化的 AI 技能分发服务。</p>
+			</div>
+			<div class="footer-links">
+				<h4>开放接口</h4>
+				<a href="/api/search.json" target="_blank">Search API</a>
+				<a href="/api/skills/1.json" target="_blank">Skill Registry</a>
+				<a href="/api/mcps/1.json" target="_blank">MCP Registry</a>
+			</div>
+		</div>
+		<div class="copyright">
+			© 2026 AI Factory. Powered by Astro & Cloudflare.
+		</div>
+	</footer>
+</BaseLayout>
 
-		* { box-sizing: border-box; margin: 0; padding: 0; }
-		body {
-			background-color: var(--bg);
-			color: var(--text);
-			font-family: 'Inter', sans-serif;
-			line-height: 1.6;
-			padding-bottom: 5rem;
-		}
+<style>
+	.container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+	
+	.hero-section {
+		padding: 2rem 0 6rem;
+		background: radial-gradient(circle at top right, var(--primary-glow), transparent),
+					radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.1), transparent);
+		margin-bottom: -3rem;
+	}
 
-		.container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-		
-		/* Hero & Actions */
-		.hero { text-align: center; padding: 5rem 0 3rem; }
-		.badge {
-			display: inline-block; padding: 0.25rem 0.75rem;
-			background: var(--glow); border: 1px solid var(--primary);
-			border-radius: 9999px; color: var(--primary);
-			font-size: 0.875rem; font-weight: 600; margin-bottom: 1.5rem;
-		}
-		h1 {
-			font-family: 'Outfit', sans-serif; font-size: 3.5rem;
-			font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.02em;
-		}
-		h1 span {
-			display: block; background: linear-gradient(to right, #818cf8, #34d399);
-			-webkit-background-clip: text; -webkit-text-fill-color: transparent;
-		}
-		.subtitle { font-size: 1.125rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2rem; }
-		
-		.actions { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-		.api-links { display: flex; gap: 1rem; }
-		.link-small { font-size: 0.75rem; color: var(--text-muted); text-decoration: none; }
-		.link-small:hover { color: var(--primary); text-decoration: underline; }
+	.nav-container {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding-bottom: 4rem;
+	}
 
-		.btn {
-			display: inline-flex; align-items: center; gap: 0.5rem;
-			padding: 0.75rem 1.5rem; border-radius: 0.75rem;
-			font-weight: 600; cursor: pointer; transition: all 0.2s;
-			text-decoration: none; border: none;
-		}
-		.btn-primary { background-color: var(--primary); color: white; }
-		.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4); }
+	.logo {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-family: 'Outfit', sans-serif;
+		font-weight: 800;
+		font-size: 1.5rem;
+	}
+	.logo span span { opacity: 0.5; font-weight: 400; font-size: 1.2rem; }
+	.logo-icon { color: var(--primary); }
 
-		/* Controls (Tabs & Search) */
-		.controls {
-			display: flex; justify-content: space-between; align-items: center;
-			margin-bottom: 2.5rem; padding: 1.5rem;
-			background: rgba(30, 41, 59, 0.5); border: 1px solid var(--border);
-			border-radius: 1.25rem; backdrop-filter: blur(10px);
-		}
-		.tabs { display: flex; gap: 0.5rem; }
-		.tab-btn {
-			padding: 0.6rem 1.2rem; border-radius: 0.75rem;
-			background: transparent; border: 1px solid transparent;
-			color: var(--text-muted); font-weight: 600; cursor: pointer;
-			transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem;
-		}
-		.tab-btn:hover { color: var(--text); }
-		.tab-btn.active {
-			background: var(--card-bg); border-color: var(--border);
-			color: var(--text); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-		}
-		.count {
-			background: var(--border); padding: 0.1rem 0.4rem;
-			border-radius: 0.4rem; font-size: 0.7rem; color: var(--text-muted);
-		}
+	.nav-actions { display: flex; gap: 1rem; }
 
-		.search-wrapper { position: relative; width: 300px; }
-		#search-input {
-			width: 100%; padding: 0.6rem 1rem;
-			background: var(--bg); border: 1px solid var(--border);
-			border-radius: 0.75rem; color: var(--text); outline: none;
-		}
-		kbd {
-			position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%);
-			background: var(--border); padding: 0.1rem 0.3rem; border-radius: 0.2rem;
-			font-size: 0.65rem; color: var(--text-muted);
-		}
+	.btn-primary {
+		background: var(--primary);
+		color: white;
+		border: none;
+		padding: 0.6rem 1.2rem;
+		border-radius: 0.75rem;
+		font-weight: 600;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+	.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px var(--primary-glow); }
 
-		/* Grid & Cards */
-		.grid {
-			display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-			gap: 2rem;
-		}
-		.content-view { display: none; }
-		.content-view.active { display: block; animation: fadeIn 0.3s ease-out; }
+	.btn-ghost {
+		background: transparent;
+		color: var(--text);
+		border: 1px solid var(--border);
+		padding: 0.6rem 1.2rem;
+		border-radius: 0.75rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		text-decoration: none;
+		font-size: 0.9rem;
+	}
 
-		@keyframes fadeIn {
-			from { opacity: 0; transform: translateY(10px); }
-			to { opacity: 1; transform: translateY(0); }
-		}
+	.hero-content { text-align: center; }
+	.badge {
+		display: inline-block;
+		padding: 0.3rem 1rem;
+		background: rgba(99, 102, 241, 0.1);
+		border: 1px solid var(--primary);
+		border-radius: 9999px;
+		color: var(--primary);
+		font-size: 0.8rem;
+		font-weight: 700;
+		margin-bottom: 2rem;
+	}
+	h1 {
+		font-family: 'Outfit', sans-serif;
+		font-size: 4rem;
+		font-weight: 800;
+		margin-bottom: 1.5rem;
+		letter-spacing: -0.03em;
+		line-height: 1;
+	}
+	h1 span { display: block; background: linear-gradient(90deg, #818cf8, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+	.subtitle { font-size: 1.25rem; color: var(--text-muted); margin-bottom: 3rem; }
 
-		.card {
-			background: var(--card-bg); border: 1px solid var(--border);
-			border-radius: 1.25rem; padding: 1.75rem;
-			display: flex; flex-direction: column; height: 100%;
-			transition: all 0.3s ease;
-		}
-		.card:hover { border-color: var(--primary); transform: translateY(-4px); }
-		.card.mcp-card:hover { border-color: var(--mcp-color); }
+	.search-area { max-width: 700px; margin: 0 auto; }
+	.search-box {
+		padding: 0.5rem 1rem;
+		border-radius: 1.25rem;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+	.search-icon { color: var(--text-muted); width: 24px; }
+	#search-input {
+		background: transparent;
+		border: none;
+		color: var(--text);
+		width: 100%;
+		padding: 0.75rem 0;
+		font-size: 1.1rem;
+		outline: none;
+	}
+	kbd {
+		background: var(--border);
+		padding: 0.2rem 0.5rem;
+		border-radius: 0.4rem;
+		font-size: 0.7rem;
+		color: var(--text-muted);
+	}
 
-		.card-header { display: flex; justify-content: space-between; margin-bottom: 1.25rem; }
-		.label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
-		.skill-label { color: var(--primary); }
-		.mcp-label { color: var(--mcp-color); }
-		.version, .protocol { font-size: 0.75rem; color: var(--text-muted); }
+	.main-content { padding-top: 5rem; }
+	.sticky-bar {
+		position: sticky;
+		top: 1.5rem;
+		z-index: 50;
+		padding: 0.75rem;
+		border-radius: 1.25rem;
+		display: flex;
+		justify-content: center;
+		margin-bottom: 4rem;
+	}
 
-		h3 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; margin-bottom: 0.75rem; }
-		p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; flex-grow: 1; }
+	.tabs { display: flex; gap: 0.5rem; }
+	.tab-btn {
+		padding: 0.5rem 1.25rem;
+		border-radius: 0.75rem;
+		background: transparent;
+		border: none;
+		color: var(--text-muted);
+		font-weight: 600;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		transition: all 0.2s;
+	}
+	.tab-btn.active { background: var(--border); color: var(--text); }
+	.tab-btn .count { background: #1f2937; padding: 0.1rem 0.4rem; border-radius: 0.4rem; font-size: 0.7rem; }
 
-		.mcp-command {
-			background: #000; border-radius: 0.75rem; margin-bottom: 1.5rem;
-			padding: 0.75rem; display: flex; justify-content: space-between; align-items: center;
-			border: 1px solid #1e293b;
-		}
-		.mcp-command code {
-			font-family: 'Fira Code', monospace; font-size: 0.8rem;
-			color: #34d399; overflow-x: auto; white-space: nowrap;
-			max-width: 85%;
-		}
-		.copy-cmd {
-			background: none; border: none; color: #4b5563;
-			cursor: pointer; padding: 0.2rem; transition: color 0.2s;
-		}
-		.copy-cmd:hover { color: #fff; }
+	.grid-section {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+		gap: 2.5rem;
+		padding-bottom: 6rem;
+	}
 
-		.card-footer {
-			padding-top: 1.25rem; border-top: 1px solid var(--border);
-			display: flex; justify-content: space-between; align-items: center;
-		}
-		.author { font-size: 0.8rem; color: var(--text-muted); }
-		.action-link { font-weight: 700; font-size: 0.875rem; color: var(--primary); text-decoration: none; }
-		.type-badge { font-size: 0.7rem; color: var(--text-muted); background: var(--border); padding: 0.2rem 0.5rem; border-radius: 0.4rem; }
-	</style>
+	.footer {
+		margin-top: 4rem;
+		padding: 4rem 2rem 2rem;
+		border-radius: 2rem 2rem 0 0;
+		border-bottom: none;
+	}
+	.footer-grid {
+		display: grid;
+		grid-template-columns: 2fr 1fr;
+		gap: 4rem;
+		margin-bottom: 4rem;
+	}
+	.footer-info h4, .footer-links h4 { font-family: 'Outfit', sans-serif; margin-bottom: 1.5rem; color: var(--text); }
+	.footer-info p { color: var(--text-muted); }
+	.footer-links { display: flex; flex-direction: column; gap: 0.75rem; }
+	.footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; }
+	.footer-links a:hover { color: var(--primary); }
+	.copyright { text-align: center; font-size: 0.8rem; color: #4b5563; padding-top: 2rem; border-top: 1px solid var(--border); }
+</style>
 
-	<script>
-		// Tab Switcher Logic
-		const tabBtns = document.querySelectorAll('.tab-btn');
-		const views = document.querySelectorAll('.content-view');
+<script>
+	// Tab Filtering
+	const tabBtns = document.querySelectorAll('.tab-btn');
+	const cards = document.querySelectorAll('.card');
 
-		tabBtns.forEach(btn => {
-			btn.addEventListener('click', () => {
-				const tab = btn.getAttribute('data-tab');
-				
-				// Update Buttons
-				tabBtns.forEach(b => b.classList.remove('active'));
-				btn.classList.add('active');
+	tabBtns.forEach(btn => {
+		btn.addEventListener('click', () => {
+			const tab = btn.getAttribute('data-tab');
+			tabBtns.forEach(b => b.classList.remove('active'));
+			btn.classList.add('active');
 
-				// Update Views
-				views.forEach(v => {
-					v.classList.remove('active');
-					if (v.id === `view-${tab}`) v.classList.add('active');
-				});
+			cards.forEach(card => {
+				const type = (card as HTMLElement).dataset.type;
+				if (tab === 'all' || type === tab) {
+					(card as HTMLElement).style.display = 'flex';
+				} else {
+					(card as HTMLElement).style.display = 'none';
+				}
 			});
 		});
+	});
 
-		// Copy Functions
-		const copyRepoBtn = document.getElementById('copy-repo');
-		copyRepoBtn?.addEventListener('click', () => {
-			navigator.clipboard.writeText(window.location.origin).then(() => {
-				const original = copyRepoBtn.innerHTML;
-				copyRepoBtn.innerHTML = '✅ 已复制';
-				setTimeout(() => { copyRepoBtn.innerHTML = original; }, 2000);
-			});
-		});
-
-		document.querySelectorAll('.copy-cmd').forEach(btn => {
-			btn.addEventListener('click', () => {
-				const cmd = btn.getAttribute('data-cmd') || '';
-				navigator.clipboard.writeText(cmd).then(() => {
-					const svg = btn.innerHTML;
-					btn.innerHTML = '✅';
-					setTimeout(() => { btn.innerHTML = svg; }, 1500);
-				});
-			});
-		});
-
-		// Search Logic (Global)
-		const searchInput = document.getElementById('search-input') as HTMLInputElement;
-		searchInput?.addEventListener('input', (e) => {
-			const term = (e.target as HTMLInputElement).value.toLowerCase();
-			document.querySelectorAll('.card').forEach((card) => {
-				const name = (card as HTMLElement).dataset.name || '';
-				const desc = (card as HTMLElement).dataset.desc || '';
-				(card as HTMLElement).style.display = (name.includes(term) || desc.includes(term)) ? 'flex' : 'none';
-			});
-		});
-
-		// Shortcut
-		document.addEventListener('keydown', (e) => {
-			if (e.key === '/' && document.activeElement !== searchInput) {
-				e.preventDefault();
-				searchInput?.focus();
+	// Global Search
+	const searchInput = document.getElementById('search-input') as HTMLInputElement;
+	searchInput?.addEventListener('input', (e) => {
+		const term = (e.target as HTMLInputElement).value.toLowerCase();
+		cards.forEach(card => {
+			const name = (card as HTMLElement).dataset.name || '';
+			const desc = (card as HTMLElement).dataset.desc || '';
+			if (name.includes(term) || desc.includes(term)) {
+				(card as HTMLElement).style.display = 'flex';
+			} else {
+				(card as HTMLElement).style.display = 'none';
 			}
 		});
-	</script>
-</body>
-</html>
+	});
+
+	// Copy Logic
+	document.getElementById('copy-repo')?.addEventListener('click', function() {
+		navigator.clipboard.writeText(window.location.origin).then(() => {
+			const original = this.innerHTML;
+			this.innerHTML = '✅ 已复制';
+			setTimeout(() => { this.innerHTML = original; }, 2000);
+		});
+	});
+
+	// Shortcut
+	document.addEventListener('keydown', (e) => {
+		if (e.key === '/' && document.activeElement !== searchInput) {
+			e.preventDefault();
+			searchInput?.focus();
+		}
+	});
+
+	// Card Copy Logic
+	document.querySelectorAll('.copy-tiny').forEach(btn => {
+		btn.addEventListener('click', () => {
+			const cmd = btn.getAttribute('data-cmd') || '';
+			navigator.clipboard.writeText(cmd).then(() => {
+				const original = btn.innerHTML;
+				btn.innerHTML = '✅';
+				setTimeout(() => { btn.innerHTML = original; }, 1500);
+			});
+		});
+	});
+</script>

@@ -1,8 +1,11 @@
 {
   "id": "fetch-mcp",
   "name": "网页抓取工具 (Fetch)",
+  "name_en": "Web Content Fetcher",
   "description": "基于 MCP 协议的网页内容提取工具，支持 Markdown 转换",
+  "description_en": "MCP-based tool for extracting web content with Markdown support.",
   "author": "MCP Community",
+  "icon": "globe",
   "mcp_config": {
     "command": "npx",
     "args": ["-y", "@modelcontextprotocol/server-fetch"]

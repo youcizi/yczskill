@@ -2,11 +2,15 @@
   {
     "id": "browser-researcher",
     "name": "知乎/CSDN 调研员",
+    "name_en": "Tech Researcher (Zhihu/CSDN)",
     "description": "遇到技术难题自动查阅知乎并提取操作指令",
+    "description_en": "Automatically research technical issues on Zhihu/CSDN and extract instructions.",
     "author": "Factory Owner",
     "category": "自动化",
+    "icon": "search",
     "version": "1.0.0",
     "slug": "browser-researcher",
+    "type": "skill",
     "download_url": "/dist-skills/browser-researcher.zip",
     "driver_type": "zip_package"
   },
@@ -18,6 +22,10 @@
     "category": "系统维护",
     "version": "1.0.0",
     "slug": "env-expert",
+    "type": "skill",
+    "name_en": "环境自愈专家",
+    "description_en": "自动检测并安装 Skillhub 环境，修复 Windows 同步问题",
+    "icon": "cpu",
     "download_url": "/dist-skills/env-expert.zip",
     "driver_type": "zip_package"
   }

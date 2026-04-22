@@ -2,8 +2,11 @@
   {
     "id": "fetch-mcp",
     "name": "网页抓取工具 (Fetch)",
+    "name_en": "Web Content Fetcher",
     "description": "基于 MCP 协议的网页内容提取工具，支持 Markdown 转换",
+    "description_en": "MCP-based tool for extracting web content with Markdown support.",
     "author": "MCP Community",
+    "icon": "globe",
     "mcp_config": {
       "command": "npx",
       "args": [
@@ -12,6 +15,7 @@
       ]
     },
     "slug": "fetch-mcp",
+    "type": "mcp",
     "driver_type": "mcp",
     "install_type": "mcp_config"
   },
@@ -31,6 +35,10 @@
       }
     },
     "slug": "google-maps-mcp",
+    "type": "mcp",
+    "name_en": "Google Maps 搜索",
+    "description_en": "通过 MCP 协议直接调用地图数据进行位置搜索与分析",
+    "icon": "wrench",
     "driver_type": "mcp",
     "install_type": "mcp_config"
   }

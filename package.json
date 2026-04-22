@@ -14,9 +14,11 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.1.10",
+    "@iconify-json/lucide": "^1.2.102",
     "adm-zip": "^0.5.17",
     "archiver": "^7.0.1",
     "astro": "^6.1.8",
+    "astro-icon": "^1.1.5",
     "fs-extra": "^11.3.4"
   }
 }
