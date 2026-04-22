@@ -1,0 +1,22 @@
+{
+  "name": "teal-transit",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "node scripts/pack-factory.js && astro dev",
+    "prebuild": "node scripts/pack-factory.js",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^13.1.10",
+    "adm-zip": "^0.5.17",
+    "archiver": "^7.0.1",
+    "astro": "^6.1.8",
+    "fs-extra": "^11.3.4"
+  }
+}

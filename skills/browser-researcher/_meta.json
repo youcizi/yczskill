@@ -1,0 +1,8 @@
+{
+  "id": "browser-researcher",
+  "name": "知乎/CSDN 调研员",
+  "description": "遇到技术难题自动查阅知乎并提取操作指令",
+  "author": "Factory Owner",
+  "category": "自动化",
+  "version": "1.0.0"
+}
