@@ -1,0 +1,166 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+	item: any;
+	lang: 'zh' | 'en';
+}
+
+const { item, lang } = Astro.props;
+const isMCP = item.driver_type === 'mcp';
+
+const name = lang === 'en' ? item.name_en : item.name;
+const desc = lang === 'en' ? item.description_en : item.description;
+
+const t = {
+	zh: { author: '作者', download: '下载 ZIP', copyCmd: '复制代码', driver: '驱动' },
+	en: { author: 'Author', download: 'Download ZIP', copyCmd: 'Copy Code', driver: 'Driver' }
+}[lang];
+
+const npxCmd = item.mcp_config?.command === 'npx' ? `npx ${item.mcp_config.args?.join(' ')}` : null;
+---
+
+<div class={`card ${isMCP ? 'mcp-card' : 'skill-card'}`} data-name={name.toLowerCase()} data-desc={desc.toLowerCase()} data-type={item.type}>
+	<div class="card-header">
+		<div class="icon-box">
+			<Icon name={`lucide:${item.icon}`} />
+		</div>
+		<span class="type-label">{isMCP ? 'MCP Tool' : 'Skill Pack'}</span>
+	</div>
+	
+	<h3>{name}</h3>
+	<p>{desc}</p>
+	
+	{isMCP && npxCmd && (
+		<div class="code-block">
+			<code>{npxCmd}</code>
+			<button class="copy-tiny" data-cmd={npxCmd}>
+				<Icon name="lucide:copy" />
+			</button>
+		</div>
+	)}
+
+	<div class="card-footer">
+		<span class="author">{t.author}: {item.author}</span>
+		{isMCP ? (
+			<span class="badge-mini">{item.install_type}</span>
+		) : (
+			<a href={item.download_url} class="download-btn">
+				<Icon name="lucide:download" />
+				{t.download}
+			</a>
+		)}
+	</div>
+</div>
+
+<style>
+	.card {
+		background: #111827;
+		border: 1px solid #374151;
+		border-radius: 1.25rem;
+		padding: 1.75rem;
+		display: flex;
+		flex-direction: column;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.card::before {
+		content: '';
+		position: absolute;
+		top: 0; left: 0; width: 100%; height: 2px;
+		background: linear-gradient(90deg, transparent, var(--primary), transparent);
+		transform: translateX(-100%);
+		transition: transform 0.5s;
+	}
+
+	.card:hover {
+		border-color: var(--primary);
+		transform: translateY(-5px);
+		box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
+	}
+
+	.card:hover::before { transform: translateX(100%); }
+
+	.card-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 1.5rem;
+	}
+
+	.icon-box {
+		width: 44px;
+		height: 44px;
+		background: rgba(99, 102, 241, 0.1);
+		border-radius: 0.75rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--primary);
+	}
+
+	.mcp-card .icon-box {
+		background: rgba(16, 185, 129, 0.1);
+		color: var(--secondary);
+	}
+
+	.type-label {
+		font-size: 0.7rem;
+		font-weight: 800;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--text-muted);
+	}
+
+	h3 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; margin-bottom: 0.75rem; }
+	p { color: #9ca3af; font-size: 0.95rem; margin-bottom: 1.5rem; flex-grow: 1; }
+
+	.code-block {
+		background: #000;
+		padding: 0.75rem;
+		border-radius: 0.75rem;
+		margin-bottom: 1.5rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		border: 1px solid #1f2937;
+	}
+
+	code { color: #34d399; font-size: 0.8rem; overflow-x: auto; white-space: nowrap; }
+	
+	.copy-tiny {
+		background: none; border: none; color: #4b5563;
+		cursor: pointer; padding: 0.2rem; transition: color 0.2s;
+	}
+	.copy-tiny:hover { color: #fff; }
+
+	.card-footer {
+		padding-top: 1.25rem;
+		border-top: 1px solid #1f2937;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.author { font-size: 0.8rem; color: #6b7280; }
+	
+	.download-btn {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-weight: 700;
+		font-size: 0.85rem;
+		color: var(--primary);
+		text-decoration: none;
+	}
+
+	.badge-mini {
+		font-size: 0.65rem;
+		background: #1f2937;
+		color: #9ca3af;
+		padding: 0.2rem 0.5rem;
+		border-radius: 0.4rem;
+	}
+</style>

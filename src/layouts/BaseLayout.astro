@@ -1,0 +1,110 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+	title: string;
+	description: string;
+	lang: 'zh' | 'en';
+}
+
+const { title, description, lang } = Astro.props;
+
+const t = {
+	zh: {
+		home: '首页',
+		skills: '技能包 (Skills)',
+		mcps: '工具 (MCP)',
+		searchPlaceholder: '搜索资源库...',
+		copyRepo: '复制仓库地址',
+		apiLinks: '查看 API',
+		author: '作者',
+		download: '下载 ZIP',
+		copyCmd: '复制指令',
+		copied: '已复制',
+		driver: '驱动',
+		count: '项'
+	},
+	en: {
+		home: 'Home',
+		skills: 'Skills',
+		mcps: 'MCP Tools',
+		searchPlaceholder: 'Search registry...',
+		copyRepo: 'Copy Repo URL',
+		apiLinks: 'View API',
+		author: 'Author',
+		download: 'Download ZIP',
+		copyCmd: 'Copy Cmd',
+		copied: 'Copied',
+		driver: 'Driver',
+		count: 'items'
+	}
+}[lang];
+---
+
+<html lang={lang}>
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<meta name="viewport" content="width=device-width" />
+	<meta name="generator" content={Astro.generator} />
+	<title>{title}</title>
+	<meta name="description" content={description} />
+	
+	<!-- SEO Tags -->
+	<meta property="og:title" content={title} />
+	<meta property="og:description" content={description} />
+	<meta name="keywords" content={lang === 'zh' ? '技能商店, MCP服务市场, 数字员工, AI插件' : 'Skill Store, MCP Marketplace, AI Agent, AI Plugins'} />
+	
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+	<slot name="header" />
+	<slot />
+	<slot name="footer" />
+
+	<style is:global>
+		:root {
+			--primary: #6366f1;
+			--primary-glow: rgba(99, 102, 241, 0.2);
+			--secondary: #10b981;
+			--bg: #030712;
+			--card-bg: #111827;
+			--card-hover: #1f2937;
+			--text: #f3f4f6;
+			--text-muted: #9ca3af;
+			--border: #374151;
+		}
+
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		body {
+			background-color: var(--bg);
+			color: var(--text);
+			font-family: 'Inter', sans-serif;
+			-webkit-font-smoothing: antialiased;
+		}
+
+		.glass {
+			background: rgba(17, 24, 39, 0.7);
+			backdrop-filter: blur(12px);
+			border: 1px solid var(--border);
+		}
+
+		.gradient-text {
+			background: linear-gradient(135deg, #818cf8 0%, #34d399 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+
+		pre, code { font-family: 'Fira Code', monospace; }
+
+		@keyframes fadeIn {
+			from { opacity: 0; transform: translateY(10px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+
+		.animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+	</style>
+</body>
+</html>
