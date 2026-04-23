@@ -4,14 +4,19 @@
   "name_en": "TAP MCP (Physical Control)",
   "description": "封装 Termux HTTP API，提供安卓真机的物理操控能力。",
   "description_en": "Wraps Termux HTTP API to provide physical control capabilities for Android devices.",
-  "author": "Antigravity",
+  "author": "ycz.me",
+  "url": "https://tools.ycz.me/dist-mcps/tap-mcp.zip",
   "category": "自动化",
   "icon": "smartphone",
   "version": "2.0.0",
   "type": "mcp",
   "dependencies": {
     "python": ">=3.10",
-    "pip": ["httpx", "fastapi", "uvicorn"]
+    "pip": [
+      "httpx",
+      "fastapi",
+      "uvicorn"
+    ]
   },
   "mcp_config": {
     "type": "python",

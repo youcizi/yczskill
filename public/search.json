@@ -1,1 +1,65 @@
-[{"id":"strategy-decomposer","name":"多维策略拆解器","name_en":"Strategy Decomposer","description":"将推广需求深度拆解为人群、内容、发布和 KPI 模块。","description_en":"Decomposes promotion requirements into Audience, Content, Publishing, and KPI modules.","author":"Antigravity","category":"策划","icon":"layers","version":"2.0.0","download_type":"zip_package","slug":"strategy-decomposer","type":"skill","download_url":"/dist-skills/strategy-decomposer.zip","driver_type":"zip_package"},{"id":"xhs-publish-logic","name":"小红书发布执行引擎","name_en":"XHS Publish Engine","description":"处理小红书具体发布逻辑，包含坐标匹配与点击序列控制。","description_en":"Handles XHS publishing logic, including coordinate matching and click sequence control.","author":"Antigravity","category":"执行","icon":"send","version":"2.0.0","download_type":"zip_package","slug":"xhs-publish-logic","type":"skill","download_url":"/dist-skills/xhs-publish-logic.zip","driver_type":"zip_package"},{"id":"tap-mcp","name":"手机真机指令集 (TAP-MCP)","name_en":"TAP MCP (Physical Control)","description":"封装 Termux HTTP API，提供安卓真机的物理操控能力。","description_en":"Wraps Termux HTTP API to provide physical control capabilities for Android devices.","author":"Antigravity","category":"自动化","icon":"smartphone","version":"2.0.0","type":"mcp","dependencies":{"python":">=3.10","pip":["httpx","fastapi","uvicorn"]},"mcp_config":{"type":"python","base_command":"python main.py"},"slug":"tap-mcp","driver_type":"mcp","download_url":"/dist-mcps/tap-mcp.zip","install_type":"mcp_source"}]
+[
+    {
+        "id": "strategy-decomposer",
+        "name": "多维策略拆解器",
+        "name_en": "Strategy Decomposer",
+        "description": "将推广需求深度拆解为人群、内容、发布和 KPI 模块。",
+        "description_en": "Decomposes promotion requirements into Audience, Content, Publishing, and KPI modules.",
+        "author": "ycz.me",
+        "url": "https://tools.ycz.me/dist-skills/strategy-decomposer.zip",
+        "category": "策划",
+        "icon": "layers",
+        "version": "2.0.0",
+        "download_type": "zip_package",
+        "slug": "strategy-decomposer",
+        "type": "skill",
+        "download_url": "/dist-skills/strategy-decomposer.zip",
+        "driver_type": "zip_package"
+    },
+    {
+        "id": "xhs-publish-logic",
+        "name": "小红书发布执行引擎",
+        "name_en": "XHS Publish Engine",
+        "description": "处理小红书具体发布逻辑，包含坐标匹配与点击序列控制。",
+        "description_en": "Handles XHS publishing logic, including coordinate matching and click sequence control.",
+        "author": "ycz.me",
+        "url": "https://tools.ycz.me/dist-skills/xhs-publish-logic.zip",
+        "category": "执行",
+        "icon": "send",
+        "version": "2.0.0",
+        "download_type": "zip_package",
+        "slug": "xhs-publish-logic",
+        "type": "skill",
+        "download_url": "/dist-skills/xhs-publish-logic.zip",
+        "driver_type": "zip_package"
+    },
+    {
+        "id": "tap-mcp",
+        "name": "手机真机指令集 (TAP-MCP)",
+        "name_en": "TAP MCP (Physical Control)",
+        "description": "封装 Termux HTTP API，提供安卓真机的物理操控能力。",
+        "description_en": "Wraps Termux HTTP API to provide physical control capabilities for Android devices.",
+        "author": "ycz.me",
+        "url": "https://tools.ycz.me/dist-mcps/tap-mcp.zip",
+        "category": "自动化",
+        "icon": "smartphone",
+        "version": "2.0.0",
+        "type": "mcp",
+        "dependencies": {
+            "python": ">=3.10",
+            "pip": [
+                "httpx",
+                "fastapi",
+                "uvicorn"
+            ]
+        },
+        "mcp_config": {
+            "type": "python",
+            "base_command": "python main.py"
+        },
+        "slug": "tap-mcp",
+        "driver_type": "mcp",
+        "download_url": "/dist-mcps/tap-mcp.zip",
+        "install_type": "mcp_source"
+    }
+]
