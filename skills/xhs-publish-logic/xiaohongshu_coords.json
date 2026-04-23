@@ -1,0 +1,12 @@
+{
+  "version": "1.0",
+  "resolution": "1080x2340",
+  "nodes": {
+    "add_button": [540, 2200],
+    "album_select": [100, 200],
+    "next_step": [950, 150],
+    "edit_title": [500, 500],
+    "edit_content": [500, 800],
+    "publish_button": [540, 2100]
+  }
+}

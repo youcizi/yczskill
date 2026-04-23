@@ -1,8 +1,0 @@
-{
-  "id": "skillhub-researcher",
-  "name": "环境自愈专家",
-  "description": "自动检测并安装 Skillhub 环境，修复 Windows 同步问题",
-  "author": "Factory Owner",
-  "category": "系统维护",
-  "version": "1.0.0"
-}

@@ -1,0 +1,12 @@
+{
+  "id": "xhs-publish-logic",
+  "name": "小红书发布执行引擎",
+  "name_en": "XHS Publish Engine",
+  "description": "处理小红书具体发布逻辑，包含坐标匹配与点击序列控制。",
+  "description_en": "Handles XHS publishing logic, including coordinate matching and click sequence control.",
+  "author": "Antigravity",
+  "category": "执行",
+  "icon": "send",
+  "version": "2.0.0",
+  "download_type": "zip_package"
+}
