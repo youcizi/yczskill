@@ -1,0 +1,13 @@
+{
+  "id": "content-generator",
+  "name": "小红书素材生成器",
+  "name_en": "Red Content Generator",
+  "description": "生成符合小红书风格的图文素材，包含 Emoji、标题、正文和标签。",
+  "description_en": "Generate Xiaohongshu-style content including Emojis, titles, body, and hashtags.",
+  "author": "Antigravity",
+  "category": "创作",
+  "icon": "pen-tool",
+  "version": "1.0.0",
+  "download_type": "zip_package",
+  "entry": "main.py"
+}

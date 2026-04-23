@@ -33,12 +33,8 @@ export const GET: APIRoute = ({ props }) => {
     status: "success",
     type: "mcp_registry",
     items: props.data.map((m: any) => ({
-      id: m.id,
-      name: m.name,
-      description: m.description,
-      author: m.author,
-      driver_type: "mcp",
-      mcp_config: m.mcp_config
+      ...m,
+      driver_type: "mcp"
     })),
     pagination: {
       total: props.total,

@@ -15,6 +15,23 @@
     "driver_type": "zip_package"
   },
   {
+    "id": "content-generator",
+    "name": "小红书素材生成器",
+    "name_en": "Red Content Generator",
+    "description": "生成符合小红书风格的图文素材，包含 Emoji、标题、正文和标签。",
+    "description_en": "Generate Xiaohongshu-style content including Emojis, titles, body, and hashtags.",
+    "author": "Antigravity",
+    "category": "创作",
+    "icon": "pen-tool",
+    "version": "1.0.0",
+    "download_type": "zip_package",
+    "entry": "main.py",
+    "slug": "content-generator",
+    "type": "skill",
+    "download_url": "/dist-skills/content-generator.zip",
+    "driver_type": "zip_package"
+  },
+  {
     "id": "skillhub-researcher",
     "name": "环境自愈专家",
     "description": "自动检测并安装 Skillhub 环境，修复 Windows 同步问题",
@@ -27,6 +44,25 @@
     "description_en": "自动检测并安装 Skillhub 环境，修复 Windows 同步问题",
     "icon": "cpu",
     "download_url": "/dist-skills/env-expert.zip",
+    "driver_type": "zip_package"
+  },
+  {
+    "id": "strategy-expert",
+    "name": "策略分析专家",
+    "name_en": "Strategy Expert",
+    "description": "“策略分析师”的大脑，负责将需求拆解为任务流 JSON。",
+    "description_en": "The brain of the 'Strategy Analyst', responsible for breaking down requirements into JSON task flows.",
+    "author": "Antigravity",
+    "category": "架构",
+    "icon": "zap",
+    "version": "1.0.0",
+    "type": "python_raw",
+    "entry": "main.py",
+    "dependencies": [
+      "pydantic"
+    ],
+    "slug": "strategy-expert",
+    "download_url": "/dist-skills/strategy-expert.zip",
     "driver_type": "zip_package"
   }
 ]

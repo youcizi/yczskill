@@ -57,7 +57,7 @@ async function packFactory() {
         ...meta,
         id: meta.id || slug,
         slug: meta.slug || slug,
-        type: isSkill ? 'skill' : 'mcp',
+        type: meta.type || (isSkill ? 'skill' : 'mcp'),
         name_en: meta.name_en || meta.name, // 兜底
         description_en: meta.description_en || meta.description,
         icon: meta.icon || (isSkill ? 'cpu' : 'wrench')
