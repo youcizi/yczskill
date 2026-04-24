@@ -10,7 +10,7 @@
     "icon": "terminal",
     "version": "1.0.0",
     "type": "mcp",
-    "url": "https://skills.ycz.me/dist-mcps/android-mcp.zip",
+    "url": "https://tools.ycz.me/dist-mcps/android-mcp.zip",
     "mcp_config": {
       "type": "node",
       "base_command": "node index.js"
@@ -60,7 +60,7 @@
     "icon": "chrome",
     "version": "1.0.0",
     "type": "mcp",
-    "url": "https://skills.ycz.me/dist-mcps/xiaohongshu-mcp.zip",
+    "url": "https://tools.ycz.me/dist-mcps/xiaohongshu-mcp.zip",
     "mcp_config": {
       "type": "node",
       "base_command": "node index.js"
