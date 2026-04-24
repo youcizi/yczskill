@@ -1,0 +1,17 @@
+{
+  "id": "android-mcp",
+  "name": "安卓真机远程指令集",
+  "name_en": "Android SSH MCP",
+  "description": "通过 SSH 连接实现对手机 Termux 的直接指令下发与文件管理。",
+  "description_en": "Direct command execution and file management for Android Termux via SSH.",
+  "author": "ycz.me",
+  "category": "自动化",
+  "icon": "terminal",
+  "version": "1.0.0",
+  "type": "mcp",
+  "url": "https://skills.ycz.me/dist-mcps/android-mcp.zip",
+  "mcp_config": {
+    "type": "node",
+    "base_command": "node index.js"
+  }
+}

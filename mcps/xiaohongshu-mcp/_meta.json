@@ -1,0 +1,17 @@
+{
+  "id": "xiaohongshu-mcp",
+  "name": "小红书网页自动化",
+  "name_en": "Xiaohongshu Web Automation",
+  "description": "基于 Puppeteer 实现的小红书笔记自动发布工具，支持扫码登录持久化。",
+  "description_en": "Puppeteer-based automation for Xiaohongshu, supporting persistent login and auto-publishing.",
+  "author": "ycz.me",
+  "category": "自动化",
+  "icon": "chrome",
+  "version": "1.0.0",
+  "type": "mcp",
+  "url": "https://skills.ycz.me/dist-mcps/xiaohongshu-mcp.zip",
+  "mcp_config": {
+    "type": "node",
+    "base_command": "node index.js"
+  }
+}

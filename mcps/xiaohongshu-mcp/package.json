@@ -1,0 +1,12 @@
+{
+  "name": "xiaohongshu-mcp",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "xiaohongshu-mcp": "./index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "latest",
+    "puppeteer": "^23.0.0"
+  }
+}
