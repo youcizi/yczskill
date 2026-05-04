@@ -68,13 +68,19 @@ async function packFactory() {
 
       let meta = await fs.readJson(metaPath);
       
-      // 容错处理：校验 type 字段防止拼写错误
+      // 容错处理：双重反序列化别名兼容拼写错误
       if (meta.tpye) {
         meta.type = meta.tpye;
         delete meta.tpye;
       }
 
-      const installManager = await getInstallManager(itemPath);
+      // 自动探测依赖与安装命令
+      let installCommand = null;
+      if (await fs.pathExists(path.join(itemPath, 'package.json'))) {
+        installCommand = "pnpm install --production";
+      } else if (await fs.pathExists(path.join(itemPath, 'requirements.txt'))) {
+        installCommand = "pip install --no-cache-dir -r requirements.txt";
+      }
       
       const entry = {
         ...meta,
@@ -84,14 +90,39 @@ async function packFactory() {
         name_en: meta.name_en || meta.name,
         description_en: meta.description_en || meta.description,
         icon: meta.icon || (isSkill ? 'cpu' : 'wrench'),
-        install_manager: meta.install_manager || installManager,
-        compatibility: "mcp-std-2026.1"
+        spec_version: "2026.1",
+        install_command: meta.install_command || installCommand,
+        permissions: meta.permissions || [], // 风险告知字段
       };
 
-      // 动态入口与运行时支持
-      if (!entry.runtime) {
-        if (installManager === 'pnpm') entry.runtime = 'node';
-        else if (installManager === 'pip') entry.runtime = 'python';
+      // 标准化运行时配置 (runtime_config)
+      if (!entry.runtime_config) {
+        // 兼容 MCP 旧配置
+        if (entry.mcp_config) {
+          const cfg = entry.mcp_config;
+          if (cfg.base_command && !cfg.command) {
+            const parts = cfg.base_command.split(' ');
+            cfg.command = parts[0];
+            cfg.args = parts.slice(1);
+          }
+          entry.runtime_config = {
+            command: cfg.command || (entry.runtime === 'python' ? 'python' : 'node'),
+            args: cfg.args || [],
+            env: cfg.env || {}
+          };
+        } else {
+          // 默认为 Skill 生成基础配置
+          const files = await fs.readdir(itemPath);
+          const isPython = entry.runtime === 'python' || 
+                           (installCommand && installCommand.includes('pip')) ||
+                           files.some(f => f.endsWith('.py'));
+          
+          entry.runtime_config = {
+            command: isPython ? 'python' : 'node',
+            args: [entry.entry || (isPython ? 'main.py' : 'index.js')],
+            env: {}
+          };
+        }
       }
 
       if (isSkill) {
@@ -102,21 +133,6 @@ async function packFactory() {
         skillsRegistry.push(entry);
       } else {
         entry.driver_type = "mcp";
-        
-        // MCP 标准兼容处理
-        if (entry.mcp_config) {
-          // 如果是旧格式，进行转换
-          if (entry.mcp_config.base_command && !entry.mcp_config.command) {
-            const parts = entry.mcp_config.base_command.split(' ');
-            entry.mcp_config.command = parts[0];
-            entry.mcp_config.args = parts.slice(1);
-          }
-          // 确保包含标准字段
-          entry.mcp_config.command = entry.mcp_config.command || (entry.runtime === 'node' ? 'node' : 'python');
-          entry.mcp_config.args = entry.mcp_config.args || [];
-          entry.mcp_config.env = entry.mcp_config.env || {};
-        }
-
         if (await hasSourceCode(itemPath)) {
           const zipName = `${entry.slug}.zip`;
           await archiveDirectory(itemPath, path.join(DIST_MCPS, zipName), entry.slug);

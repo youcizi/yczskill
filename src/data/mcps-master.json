@@ -17,13 +17,19 @@
       "command": "node",
       "args": [
         "index.js"
+      ]
+    },
+    "slug": "android-mcp",
+    "spec_version": "2026.1",
+    "install_command": "pnpm install --production",
+    "permissions": [],
+    "runtime_config": {
+      "command": "node",
+      "args": [
+        "index.js"
       ],
       "env": {}
     },
-    "slug": "android-mcp",
-    "install_manager": "pnpm",
-    "compatibility": "mcp-std-2026.1",
-    "runtime": "node",
     "driver_type": "mcp",
     "download_url": "/dist-mcps/android-mcp.zip",
     "install_type": "mcp_source"
@@ -54,12 +60,19 @@
       "command": "python",
       "args": [
         "main.py"
+      ]
+    },
+    "slug": "tap-mcp",
+    "spec_version": "2026.1",
+    "install_command": null,
+    "permissions": [],
+    "runtime_config": {
+      "command": "python",
+      "args": [
+        "main.py"
       ],
       "env": {}
     },
-    "slug": "tap-mcp",
-    "install_manager": null,
-    "compatibility": "mcp-std-2026.1",
     "driver_type": "mcp",
     "download_url": "/dist-mcps/tap-mcp.zip",
     "install_type": "mcp_source"
@@ -82,13 +95,19 @@
       "command": "node",
       "args": [
         "index.js"
+      ]
+    },
+    "slug": "xiaohongshu-mcp",
+    "spec_version": "2026.1",
+    "install_command": "pnpm install --production",
+    "permissions": [],
+    "runtime_config": {
+      "command": "node",
+      "args": [
+        "index.js"
       ],
       "env": {}
     },
-    "slug": "xiaohongshu-mcp",
-    "install_manager": "pnpm",
-    "compatibility": "mcp-std-2026.1",
-    "runtime": "node",
     "driver_type": "mcp",
     "download_url": "/dist-mcps/xiaohongshu-mcp.zip",
     "install_type": "mcp_source"

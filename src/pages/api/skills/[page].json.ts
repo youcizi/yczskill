@@ -31,7 +31,7 @@ export async function getStaticPaths() {
 export const GET: APIRoute = ({ props }) => {
   return new Response(JSON.stringify({
     status: "success",
-    compatibility: "mcp-std-2026.1",
+    spec_version: "2026.1",
     items: props.data || [],
     pagination: {
       total: props.total || 0,

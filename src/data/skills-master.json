@@ -13,8 +13,16 @@
     "type": "skill",
     "download_type": "zip_package",
     "slug": "strategy-decomposer",
-    "install_manager": null,
-    "compatibility": "mcp-std-2026.1",
+    "spec_version": "2026.1",
+    "install_command": null,
+    "permissions": [],
+    "runtime_config": {
+      "command": "python",
+      "args": [
+        "main.py"
+      ],
+      "env": {}
+    },
     "download_url": "/dist-skills/strategy-decomposer.zip",
     "driver_type": "zip_package"
   },
@@ -32,8 +40,16 @@
     "version": "2.0.0",
     "download_type": "zip_package",
     "slug": "xhs-publish-logic",
-    "install_manager": null,
-    "compatibility": "mcp-std-2026.1",
+    "spec_version": "2026.1",
+    "install_command": null,
+    "permissions": [],
+    "runtime_config": {
+      "command": "python",
+      "args": [
+        "main.py"
+      ],
+      "env": {}
+    },
     "download_url": "/dist-skills/xhs-publish-logic.zip",
     "driver_type": "zip_package"
   }
