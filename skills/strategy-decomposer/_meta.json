@@ -9,5 +9,6 @@
   "category": "策划",
   "icon": "layers",
   "version": "2.0.0",
+  "type": "skill",
   "download_type": "zip_package"
 }

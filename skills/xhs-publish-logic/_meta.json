@@ -8,6 +8,7 @@
   "url": "https://tools.ycz.me/dist-skills/xhs-publish-logic.zip",
   "category": "执行",
   "icon": "send",
+  "type": "skill",
   "version": "2.0.0",
   "download_type": "zip_package"
 }
