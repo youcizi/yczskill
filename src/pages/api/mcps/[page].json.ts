@@ -32,6 +32,7 @@ export const GET: APIRoute = ({ props }) => {
   return new Response(JSON.stringify({
     status: "success",
     type: "mcp_registry",
+    compatibility: "mcp-std-2026.1",
     items: props.data.map((m: any) => ({
       ...m,
       driver_type: "mcp"
