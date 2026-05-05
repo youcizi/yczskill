@@ -28,15 +28,6 @@ function archiveDirectory(sourceDir, outPath, slug) {
   });
 }
 
-async function getInstallManager(dir) {
-  if (await fs.pathExists(path.join(dir, 'pnpm-lock.yaml')) || await fs.pathExists(path.join(dir, 'package.json'))) {
-    return 'pnpm';
-  }
-  if (await fs.pathExists(path.join(dir, 'requirements.txt')) || await fs.pathExists(path.join(dir, 'pyproject.toml'))) {
-    return 'pip';
-  }
-  return null;
-}
 
 async function hasSourceCode(dir) {
   const files = await fs.readdir(dir);
@@ -74,12 +65,16 @@ async function packFactory() {
         delete meta.tpye;
       }
 
-      // 自动探测依赖与安装命令
+      // 自动探测依赖与安装命令 (精准模式)
       let installCommand = null;
+      let requiresBuild = false;
+      
       if (await fs.pathExists(path.join(itemPath, 'package.json'))) {
         installCommand = "pnpm install --production";
+        requiresBuild = true;
       } else if (await fs.pathExists(path.join(itemPath, 'requirements.txt'))) {
         installCommand = "pip install --no-cache-dir -r requirements.txt";
+        requiresBuild = true;
       }
       
       const entry = {
@@ -92,6 +87,7 @@ async function packFactory() {
         icon: meta.icon || (isSkill ? 'cpu' : 'wrench'),
         spec_version: "2026.1",
         install_command: meta.install_command || installCommand,
+        requires_build: meta.requires_build !== undefined ? meta.requires_build : requiresBuild,
         permissions: meta.permissions || [], // 风险告知字段
       };
 
